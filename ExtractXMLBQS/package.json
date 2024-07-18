@@ -1,0 +1,19 @@
+{
+  "name": "extractfromxml",
+  "version": "1.0.0",
+  "description": "Web service that extracts specific xml tag and returns it as plain text",
+  "main": "ExtractXML.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chanamel Ungar",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "domhandler": "^5.0.3",
+    "domutils": "^3.1.0",
+    "express": "^4.19.2",
+    "htmlparser2": "^9.1.0",
+    "xml2js": "^0.6.2"
+  }
+}
