@@ -31,7 +31,7 @@ app.post('/', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 443;
 app.listen(PORT, () => {
   console.log(`Node.js server is running on port ${PORT}`);
 });
