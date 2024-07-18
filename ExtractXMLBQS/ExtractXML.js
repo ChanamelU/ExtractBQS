@@ -4,34 +4,32 @@ const bodyParser = require('body-parser');
 const xml2js = require('xml2js');
 
 const app = express();
-app.use(bodyParser.text({ type: 'application/xml' }));
+const port = 10000;
 
-function extractTagContents(xmlData, tagName) {
-  return new Promise((resolve, reject) => {
-    xml2js.parseString(xmlData, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        const content = result.item[tagName][0];
-        resolve(content);
-      }
+app.use(bodyParser.text({ type: 'text/xml' }));
+
+app.post('/extract', (req, res) => {
+  console.log(req)
+    const xml = req.body;
+    
+    // Parse the XML
+    const parser = new xml2js.Parser();
+    parser.parseString(xml, (err, result) => {
+        if (err) {
+            return res.status(400).send('Invalid XML');
+        }
+
+        // Extract the parcellabelsPDF data
+        try {
+            const parcellabelsPDF = result['soap:Envelope']['soap:Body'][0]['storeOrdersResponse'][0]['orderResult'][0]['parcellabelsPDF'][0];
+            res.send(parcellabelsPDF);
+        } catch (e) {
+            res.status(500).send('Error extracting parcellabelsPDF');
+        }
     });
-  });
-}
-
-app.post('/', async (req, res) => {
-  const tagName = req.query.tag;
-  const xmlData = req.body;
-
-  try {
-    const content = await extractTagContents(xmlData, tagName);
-    res.type('text/plain').status(200).send(content);
-  } catch (err) {
-    res.status(400).send(`Error: ${err.message}`);
-  }
 });
 
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => {
-  console.log(`Node.js server is running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
+
